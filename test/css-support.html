@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>CSS support test for Internet Explorer and W3C compliant browsers</title>
+
+  <style type="text/css">
+  body { font: 1em normal arial, helvetica, sans-serif; }
+  table { font-size: .8em; border-collapse: collapse; }
+  th, td { border: 2px solid black; padding: 4px; }
+  #css3-test { margin: 0 32px 0 0; float: left; }
+  #vendor-test { display: block; float: none; }
+  thead { background-color: #ffffcc; }
+  .pass { background-color: lime; }
+  .fail { background-color: red; }
+  </style>
+
+  <script type="text/javascript" src="../src/css-support.js"></script>
+  <script type="text/javascript" src="../src/css3-at-rules.js"></script>
+  <script type="text/javascript" src="../src/css3-selectors.js"></script>
+  <script type="text/javascript" src="../src/css3-properties.js"></script>
+  <script type="text/javascript" src="../src/css3-media-queries.js"></script>
+
+  <script type="text/javascript">
+  function test_table(category, type) {
+
+    var d = document,
+    v = d.defaultView,
+    i, j, count, length,
+    r = d.documentElement,
+
+    property, query, rule, selector, tb,
+    pass, passed = 0, tested = [ ], vendor = [ ],
+
+    nonCSSProperties = {
+      cssText: 1,
+      getPropertyValue: 1,
+      getPropertyCSSValue: 1,
+      getPropertyPriority: 1,
+      getPropertyShorthand: 1,
+      isPropertyImplicit: 1,
+      propertyIsEnumerable: 1,
+      item: 1,
+      length: 1,
+      parentRule: 1,
+      setProperty: 1,
+      removeProperty: 1
+    },
+
+    toCamelCase =
+      function(property) {
+        return property.replace(/-([a-z])/g,
+          function(m, c) {
+            return c.toUpperCase();
+          }
+        );
+      },
+
+    log =
+      function(selector, result) {
+        var line = d.createElement('tr');
+        line.appendChild(d.createElement('td'));
+        line.appendChild(d.createElement('td'));
+        line.childNodes[0].innerHTML = selector;
+		line.childNodes[1].innerHTML = result;
+        line.childNodes[1].className =
+          result ? 'pass' : 'fail';
+        tb.appendChild(line);
+      };
+
+    log2=
+      function(selector, result) {
+        var line = d.createElement('tr');
+        line.appendChild(d.createElement('td'));
+        line.appendChild(d.createElement('td'));
+        line.childNodes[0].innerHTML = selector;
+		line.childNodes[1].innerHTML = result;
+        tb.appendChild(line);
+      };
+
+    if (typeof category != 'string') return false;
+	if (1 > category) return false;
+
+    removeTable('css3-test');
+    removeTable('vendor-test');
+
+    tb = createTable('css3-test', [type, 'Supported']);
+
+    switch(category) {
+      case '7':
+        if (typeof mediaqueries != 'undefined') {
+          count = 0;
+          passed = 0;
+          for (j in mediaqueries) {
+            length = mediaqueries[j].length;
+            for (i = 0; length > i; i++) {
+              query = mediaqueries[j][i];
+              if ((pass = CSS.supportMediaQuery(query))) passed++;
+              log(query, pass);
+              count++;
+            }
+          }
+		}
+		break;
+      case '6':
+        if (typeof rules != 'undefined') {
+          count = 0;
+          passed = 0;
+          for (j in rules) {
+            length = rules[j].length;
+            for (i = 0; length > i; i++) {
+              rule = rules[j][i];
+              if ((pass = CSS.supportAtRule(rule))) passed++;
+              log(rule, pass);
+              count++;
+            }
+          }
+		}
+		break;
+      case '5':
+        if (typeof selectors != 'undefined') {
+          count = 0;
+          passed = 0;
+          for (j in selectors) {
+            length = selectors[j].length;
+            for (i = 0; length > i; i++) {
+              selector = selectors[j][i];
+              if ((pass = CSS.supportSelector(selector))) passed++;
+              log(selector, pass);
+              count++;
+            }
+          }
+        }
+        break;
+      default:
+        if (typeof properties != 'undefined') {
+          count = 0;
+          passed = 0;
+          for (j in properties) {
+            property = properties[j][0];
+            // test CSS3 properties
+            if (properties[j][category] == 'yes') {
+              if (pass = CSS.supportProperty(property)) passed++;
+              log(property, pass);
+              count++;
+            }
+            tested[toCamelCase(property)] = true;
+          }
+        }
+        break;
+    }
+
+    tb.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
+    tb.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = 'Total: ' + passed;
+
+    if (5 > category) {
+
+      tb = createTable('vendor-test', ['Possible CSS vendor extension', 'Default value']);
+
+      s = v ? v.getComputedStyle(r, '') : r.currentStyle;
+
+      length = s.length;
+
+      // code to detect different vendor properties
+      if (length) {
+        // Firefox, Safari
+        for (i = 0; length > i; i++) {
+          if (!tested[toCamelCase(s[i])] && !nonCSSProperties[s[i]]) {
+            vendor.push(s[i]);
+            tested[s[i]] = true;
+          }
+        }
+      } else {
+        // IE, Opera
+        for (i in s) {
+          if (!tested[i] && !nonCSSProperties[i]) {
+            vendor.push(i);
+            tested[i] = true;
+          }
+        }
+      }
+
+      count = 0;
+      length = vendor.length;
+      vendor = vendor.sort();
+      for (i = 0; length > i; ++i) {
+        log2(vendor[i], s[toCamelCase(vendor[i])]);
+        count++;
+      }
+
+      tb.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
+      tb.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = '*';
+
+    }
+
+    function removeTable(id) {
+      var table = d.getElementById(id);
+      table && d.body.removeChild(table);
+    }
+
+    function createTable(id, headers) {
+
+      var table, th, tb, tf, tr, td, i = 0, l = headers.length;
+
+      table = d.getElementById(id);
+      table && d.body.removeChild(table);
+      table = d.createElement('table');
+
+      tb = d.createElement('tbody');
+      th = d.createElement('thead');
+      tf = d.createElement('tfoot');
+      tr = d.createElement("tr");
+      td = d.createElement("td");
+
+      tr.appendChild(td.cloneNode(false));
+      tr.appendChild(td.cloneNode(false));
+
+      th.appendChild(tr.cloneNode(true));
+      tf.appendChild(tr.cloneNode(true));
+
+      for (; l > i; i++) {
+        th.firstChild.childNodes[i].innerHTML = headers[i] || '';
+      }
+
+      table.appendChild(tb);
+      table.appendChild(th);
+      table.appendChild(tf);
+
+      d.body.appendChild(table).id = id;
+
+      return tb;
+    }
+
+  }
+
+  function groupChanged(element) {
+    test_table(element.options[element.selectedIndex].value,
+      element.options[element.selectedIndex].text);
+  }
+
+  // cross-browser event delegation :-)
+  document.onclick = function(e) {
+    e || (e = event);
+    var o = e.target || e.srcElement;
+    if (o && /testbutton/.test(o.id)) {
+      groupChanged(o.form['testgroup']);
+    }
+    o = null;
+  }
+
+  </script>
+
+</head>
+<body>
+
+<h1>CSS selectors and properties testing</h1>
+
+<p>The objective of this example is to show some of the intended use of the
+<code>supportAtRule, supportSelector, supportProperty, supportMediaQuery</code>
+methods that may be found <a href="../src/css-support.js">here</a>.
+
+<p>The three methods allow direct inspection of supported features (at-rules,
+selectors, properties) using browsers own internal CSS parser. To ease the
+task I narrowed down my objective to only one exact thing for now, use the
+browser to validate some CSS syntax before injecting that into elements
+style or document stylesheets for use in testing and production code.</p>
+
+<p>The intent was not to show or find browser bugs but test for missing
+support compared to standard specifications, this has nothing to do with
+how well browsers results are rendered on the screen nor with correctness
+of browser implementations.</p>
+
+<p>The code just checks for what seems to be available using feature detection.</p>
+
+<h2>How is detection performed</h2>
+
+<p>Using Javascript... and observing behavior of browsers own internal CSS parsers engines.</p>
+
+<p>On W3C compliant browsers the <code>addRule()/removeRule()</code> methods of the stylesheet object
+are used to manipulate the rules with the requested "tokens" and the outcome is inspected to match.
+The operation is performed in a <code>try/catch</code> block to take advantage of the CSS engine
+throwing error and letting us know of the unexpected illegal syntax.</p>
+
+<p>On IE browsers up to the latest IE8 when a rule is inserted in the stylesheet, it produces two changes
+in the parsed output: a) the <code>selectorText</code> property is set to the upper case string 'UNKNOWN'
+if it is invalid, b) the representation read back from the stylesheet <code>cssText</code> have properties
+with upper case names if they are recognized, or they are discarded from the representation if unknown to
+the parser.</p>
+
+<p>It was noticed that some specific properties would persist in the <code>cssText</code> representation
+maintaining the original case in names, we have taken that as a failure in these test as it seemed most
+adequate with the expected result.</p>
+
+<p>In IE the invalid properties values are converted to the lower case string 'undefined' as an
+extra notification that the property is not consistent with expected value/type (maybe enumerated).</p>
+
+<h2>Notes:</h2>
+<ul>
+<li>at-rules and media queries results may still differ from what browsers implements (currently using the internal parser notfications)</li>
+<li>some element property name is different from the CSS property name (ex: float -> styleFloat) but is taken care of in the test code</li>
+<li>only element properties are checked, element attributes are not taken in consideration in these tests</li>
+<li>rules, properties and values are inserted dynamically in a <code>&lt;style type="text/css"&gt;</code> inline element</li>
+<li>specs seems to indicate "@charset" at-rules are only valid in externally referenced stylesheets</li>
+</ul>
+
+<div>
+	<form action="">
+		<p>
+		<select id="testgroup">
+			<option value="0" selected="selected">Choose test group</option>
+			<option value="7">CSS 3 Media Queries</option>
+			<option value="6">CSS 3 At Rules</option>
+			<option value="5">CSS 3 Selectors</option>
+			<option value="4">CSS 3 Properties</option>
+			<option value="3">CSS 2.1 Properties</option>
+			<option value="2">CSS 2 Properties</option>
+			<option value="1">CSS 1 Properties</option>
+		</select>
+		<input id="testbutton" type="button" value="Go!">
+		</p>
+	</form>
+</div>
+
+</body>
+</html>
