@@ -29,7 +29,7 @@
     i, j, count, length,
     r = d.documentElement,
 
-    property, query, rule, selector, tb,
+    property, query, rule, selector, tb, s, value,
     pass, passed = 0, tested = [ ], vendor = [ ],
 
     nonCSSProperties = {
@@ -184,7 +184,9 @@
       length = vendor.length;
       vendor = vendor.sort();
       for (i = 0; length > i; ++i) {
-        log2(vendor[i], s[toCamelCase(vendor[i])]);
+        value = s[toCamelCase(vendor[i])] ||
+          s.getPropertyValue && s.getPropertyValue(vendor[i]);
+        log2(vendor[i], value);
         count++;
       }
 
