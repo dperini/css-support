@@ -3,7 +3,7 @@
 // Latest: http://www.w3.org/TR/css3-syntax/
 // Current: http://www.w3.org/TR/2003/WD-css3-syntax-20030813/
 */
-var rules = {
+CSS.rules = {
 
   atRules: (function() {
     var items = [ ];
@@ -30,5 +30,4 @@ var rules = {
     items.push('@page { size: landscape; }');
     return items;
   })()
-
 };

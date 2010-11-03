@@ -6,7 +6,8 @@
 // format (6 fields):
 // 	property-name  css1  css2  css2.1 css3 defaultValue
 */
-var properties = [
+CSS.properties = [
+
   [ 'alignment-adjust', 'no', 'no', 'no', 'yes', 'auto' ],
   [ 'alignment-baseline', 'no', 'no', 'no', 'yes', 'baseline' ],
   [ 'animation', 'no', 'no', 'no', 'yes', 'depending on individual properties' ],
@@ -107,7 +108,6 @@ var properties = [
   [ 'dominant-baseline', 'no', 'no', 'no', 'yes', 'auto' ],
   [ 'drop-initial-after-adjust', 'no', 'no', 'no', 'yes', 'text-after-edge' ],
   [ 'drop-initial-after-align', 'no', 'no', 'no', 'yes', 'baseline' ],
-
   [ 'drop-initial-before-adjust', 'no', 'no', 'no', 'yes', 'text-before-edge' ],
   [ 'drop-initial-before-align', 'no', 'no', 'no', 'yes', 'caps-height' ],
   [ 'drop-initial-size', 'no', 'no', 'no', 'yes', 'auto' ],
@@ -208,7 +208,6 @@ var properties = [
   [ 'quotes', 'no', 'yes', 'yes', 'yes', 'implementation dependent' ],
   [ 'rendering-intent', 'no', 'no', 'no', 'yes', 'auto' ],
   [ 'resize', 'no', 'no', 'no', 'yes', 'none' ],
-
   [ 'rest', 'no', 'no', 'no', 'yes', 'implementation dependent' ],
   [ 'rest-after', 'no', 'no', 'no', 'yes', 'implementation dependent' ],
   [ 'rest-before', 'no', 'no', 'no', 'yes', 'implementation dependent' ],

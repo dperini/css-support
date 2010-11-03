@@ -1,10 +1,9 @@
-this.CSS || (this.CSS = { });
+this.CSS || (this.CSS = (function(global) {
 
-CSS = (function(global) {
-
-	var version = '0.2',
+	var version = '0.3',
 
 	sheet, style,
+
 	doc = global.document,
 	root = doc.documentElement,
 	head = root.getElementsByTagName('head')[0] || root,
@@ -130,4 +129,4 @@ CSS = (function(global) {
 
 	};
 
-})(this);
+})(this));

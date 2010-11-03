@@ -22,15 +22,19 @@
   <script type="text/javascript" src="../src/css3-media-queries.js"></script>
 
   <script type="text/javascript">
-  function test_table(category, type) {
+  CSS.test_table = function(category, type) {
 
-    var d = document,
-    v = d.defaultView,
-    i, j, count, length,
-    r = d.documentElement,
+    var i, j, count, length,
 
-    property, query, rule, selector, tb, s, value,
-    pass, passed = 0, tested = [ ], vendor = [ ],
+    property, query, rule,
+	selector, style, value,
+
+    pass, passed = 0, section,
+	tested = [ ], vendor = [ ],
+
+    doc = document,
+    view = doc.defaultView,
+    root = doc.documentElement,
 
     nonCSSProperties = {
       cssText: 1,
@@ -58,23 +62,23 @@
 
     log =
       function(selector, result) {
-        var line = d.createElement('tr');
-        line.appendChild(d.createElement('td'));
-        line.appendChild(d.createElement('td'));
+        var line = doc.createElement('tr');
+        line.appendChild(doc.createElement('td'));
+        line.appendChild(doc.createElement('td'));
         line.childNodes[0].innerHTML = selector;
         line.childNodes[1].innerHTML = result;
         line.childNodes[1].className = result ? 'pass' : 'fail';
-        tb.appendChild(line);
-      };
+        section.appendChild(line);
+      },
 
     log2=
       function(selector, result) {
-        var line = d.createElement('tr');
-        line.appendChild(d.createElement('td'));
-        line.appendChild(d.createElement('td'));
+        var line = doc.createElement('tr');
+        line.appendChild(doc.createElement('td'));
+        line.appendChild(doc.createElement('td'));
         line.childNodes[0].innerHTML = selector;
         line.childNodes[1].innerHTML = result;
-        tb.appendChild(line);
+        section.appendChild(line);
       };
 
     if (typeof category != 'string') return false;
@@ -84,17 +88,17 @@
     removeTable('css3-test');
     removeTable('vendor-test');
 
-    tb = createTable('css3-test', [type, 'Supported']);
+    section = createTable('css3-test', [type, 'Supported']);
 
     switch(category) {
       case '7':
-        if (typeof mediaqueries != 'undefined') {
+        if (typeof CSS.mediaqueries != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in mediaqueries) {
-            length = mediaqueries[j].length;
+          for (j in CSS.mediaqueries) {
+            length = CSS.mediaqueries[j].length;
             for (i = 0; length > i; i++) {
-              query = mediaqueries[j][i];
+              query = CSS.mediaqueries[j][i];
               if ((pass = CSS.supportMediaQuery(query))) passed++;
               log(query, pass);
               count++;
@@ -103,13 +107,13 @@
         }
         break;
       case '6':
-        if (typeof rules != 'undefined') {
+        if (typeof CSS.rules != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in rules) {
-            length = rules[j].length;
+          for (j in CSS.rules) {
+            length = CSS.rules[j].length;
             for (i = 0; length > i; i++) {
-              rule = rules[j][i];
+              rule = CSS.rules[j][i];
               if ((pass = CSS.supportAtRule(rule))) passed++;
               log(rule, pass);
               count++;
@@ -118,13 +122,13 @@
         }
         break;
       case '5':
-        if (typeof selectors != 'undefined') {
+        if (typeof CSS.selectors != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in selectors) {
-            length = selectors[j].length;
+          for (j in CSS.selectors) {
+            length = CSS.selectors[j].length;
             for (i = 0; length > i; i++) {
-              selector = selectors[j][i];
+              selector = CSS.selectors[j][i];
               if ((pass = CSS.supportSelector(selector))) passed++;
               log(selector, pass);
               count++;
@@ -133,13 +137,13 @@
         }
         break;
       default:
-        if (typeof properties != 'undefined') {
+        if (typeof CSS.properties != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in properties) {
-            property = properties[j][0];
+          for (j in CSS.properties) {
+            property = CSS.properties[j][0];
             // test CSS3 properties
-            if (properties[j][category] == 'yes') {
+            if (CSS.properties[j][category] == 'yes') {
               if (pass = CSS.supportProperty(property)) passed++;
               log(property, pass);
               count++;
@@ -150,24 +154,24 @@
         break;
     }
 
-    tb.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
-    tb.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = 'Total: ' + passed;
+    section.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
+    section.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = 'Total: ' + passed;
 
     if (5 > category) {
 
-      tb = createTable('vendor-test', ['Possible CSS vendor extension', 'Default value']);
+      section = createTable('vendor-test', ['Possible CSS vendor extension', 'Default value']);
 
-      s = v ? v.getComputedStyle(r, '') : r.currentStyle;
+      style = view ? view.getComputedStyle(root, '') : root.currentStyle;
 
-      length = s.length;
+      length = style.length;
 
       // code to detect different vendor properties
       if (length) {
         // Firefox, Safari
         for (i = 0; length > i; i++) {
-          if (!tested[toCamelCase(s[i])] && !nonCSSProperties[s[i]]) {
-            vendor.push(s[i]);
-            tested[s[i]] = true;
+          if (!tested[toCamelCase(style[i])] && !nonCSSProperties[style[i]]) {
+            vendor.push(style[i]);
+            tested[style[i]] = true;
           }
         }
       } else {
@@ -184,35 +188,35 @@
       length = vendor.length;
       vendor = vendor.sort();
       for (i = 0; length > i; ++i) {
-        value = s[toCamelCase(vendor[i])] ||
-          s.getPropertyValue && s.getPropertyValue(vendor[i]);
+        value = style[toCamelCase(vendor[i])] ||
+          style.getPropertyValue && style.getPropertyValue(vendor[i]);
         log2(vendor[i], value);
         count++;
       }
 
-      tb.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
-      tb.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = '*';
+      section.nextSibling.nextSibling.firstChild.childNodes[0].innerHTML = 'Total: ' + count;
+      section.nextSibling.nextSibling.firstChild.childNodes[1].innerHTML = '*';
 
     }
 
     function removeTable(id) {
-      var table = d.getElementById(id);
-      table && d.body.removeChild(table);
+      var table = doc.getElementById(id);
+      table && doc.body.removeChild(table);
     }
 
     function createTable(id, headers) {
 
       var table, th, tb, tf, tr, td, i = 0, l = headers.length;
 
-      table = d.getElementById(id);
-      table && d.body.removeChild(table);
-      table = d.createElement('table');
+      table = doc.getElementById(id);
+      table && doc.body.removeChild(table);
+      table = doc.createElement('table');
 
-      tb = d.createElement('tbody');
-      th = d.createElement('thead');
-      tf = d.createElement('tfoot');
-      tr = d.createElement("tr");
-      td = d.createElement("td");
+      tb = doc.createElement('tbody');
+      th = doc.createElement('thead');
+      tf = doc.createElement('tfoot');
+      tr = doc.createElement("tr");
+      td = doc.createElement("td");
 
       tr.appendChild(td.cloneNode(false));
       tr.appendChild(td.cloneNode(false));
@@ -228,7 +232,7 @@
       table.appendChild(th);
       table.appendChild(tf);
 
-      d.body.appendChild(table).id = id;
+      doc.body.appendChild(table).id = id;
 
       return tb;
     }
@@ -236,7 +240,7 @@
   }
 
   function groupChanged(element) {
-    test_table(element.options[element.selectedIndex].value,
+    CSS.test_table(element.options[element.selectedIndex].value,
       element.options[element.selectedIndex].text);
   }
 

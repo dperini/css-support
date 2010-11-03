@@ -3,7 +3,7 @@
 // Latest: http://www.w3.org/TR/css3-mediaqueries/
 // Current: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/
 */
-var mediaqueries = {
+CSS.mediaqueries = {
 
   items: [
     '@media all { body { color: inherit; } }',
@@ -27,5 +27,4 @@ var mediaqueries = {
     '@media (orientation: portrait) and (min-device-width: 480px) { body { color: inherit; } }',
     '@media transform-3d, -o-transform-3d, -moz-transform-3d, -ms-transform-3d, -webkit-transform-3d { body { color: inherit; } }'
   ]
-
 };
