@@ -62,9 +62,8 @@
         line.appendChild(d.createElement('td'));
         line.appendChild(d.createElement('td'));
         line.childNodes[0].innerHTML = selector;
-		line.childNodes[1].innerHTML = result;
-        line.childNodes[1].className =
-          result ? 'pass' : 'fail';
+        line.childNodes[1].innerHTML = result;
+        line.childNodes[1].className = result ? 'pass' : 'fail';
         tb.appendChild(line);
       };
 
@@ -74,12 +73,13 @@
         line.appendChild(d.createElement('td'));
         line.appendChild(d.createElement('td'));
         line.childNodes[0].innerHTML = selector;
-		line.childNodes[1].innerHTML = result;
+        line.childNodes[1].innerHTML = result;
         tb.appendChild(line);
       };
 
     if (typeof category != 'string') return false;
-	if (1 > category) return false;
+
+    if (1 > category) return false;
 
     removeTable('css3-test');
     removeTable('vendor-test');
@@ -100,8 +100,8 @@
               count++;
             }
           }
-		}
-		break;
+        }
+        break;
       case '6':
         if (typeof rules != 'undefined') {
           count = 0;
@@ -115,8 +115,8 @@
               count++;
             }
           }
-		}
-		break;
+        }
+        break;
       case '5':
         if (typeof selectors != 'undefined') {
           count = 0;
@@ -304,21 +304,21 @@ extra notification that the property is not consistent with expected value/type 
 </ul>
 
 <div>
-	<form action="">
-		<p>
-		<select id="testgroup">
-			<option value="0" selected="selected">Choose test group</option>
-			<option value="7">CSS 3 Media Queries</option>
-			<option value="6">CSS 3 At Rules</option>
-			<option value="5">CSS 3 Selectors</option>
-			<option value="4">CSS 3 Properties</option>
-			<option value="3">CSS 2.1 Properties</option>
-			<option value="2">CSS 2 Properties</option>
-			<option value="1">CSS 1 Properties</option>
-		</select>
-		<input id="testbutton" type="button" value="Go!">
-		</p>
-	</form>
+  <form action="">
+    <p>
+      <select id="testgroup">
+        <option value="0" selected="selected">Choose test group</option>
+        <option value="7">CSS 3 Media Queries</option>
+        <option value="6">CSS 3 At Rules</option>
+        <option value="5">CSS 3 Selectors</option>
+        <option value="4">CSS 3 Properties</option>
+        <option value="3">CSS 2.1 Properties</option>
+        <option value="2">CSS 2 Properties</option>
+        <option value="1">CSS 1 Properties</option>
+      </select>
+      <input id="testbutton" type="button" value="Go!">
+    </p>
+  </form>
 </div>
 
 </body>
