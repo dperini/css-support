@@ -3,7 +3,7 @@
 // Latest: http://www.w3.org/TR/css3-selectors/
 // Current: http://www.w3.org/TR/2009/PR-css3-selectors-20091215
 */
-CSS.selectors = {
+CSSTest.selectors = {
 
   universalSelector: [ '*' ],
 

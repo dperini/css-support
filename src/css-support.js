@@ -1,6 +1,6 @@
-this.CSS || (this.CSS = (function(global) {
+this.CSSTest || (this.CSSTest = (function(global) {
 
-	var version = '0.3',
+	var version = '0.4',
 
 	sheet, style,
 

@@ -3,7 +3,7 @@
 // Latest: http://www.w3.org/TR/css3-mediaqueries/
 // Current: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/
 */
-CSS.mediaqueries = {
+CSSTest.mediaqueries = {
 
   items: [
     '@media all { body { color: inherit; } }',

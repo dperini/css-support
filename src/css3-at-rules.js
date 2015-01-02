@@ -3,7 +3,7 @@
 // Latest: http://www.w3.org/TR/css3-syntax/
 // Current: http://www.w3.org/TR/2003/WD-css3-syntax-20030813/
 */
-CSS.rules = {
+CSSTest.rules = {
 
   atRules: (function() {
     var items = [ ];

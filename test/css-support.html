@@ -22,7 +22,7 @@
   <script type="text/javascript" src="../src/css3-media-queries.js"></script>
 
   <script type="text/javascript">
-  CSS.test_table = function(category, type) {
+  CSSTest.test_table = function(category, type) {
 
     var i, j, count, length,
 
@@ -92,14 +92,14 @@
 
     switch(category) {
       case '7':
-        if (typeof CSS.mediaqueries != 'undefined') {
+        if (typeof CSSTest.mediaqueries != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in CSS.mediaqueries) {
-            length = CSS.mediaqueries[j].length;
+          for (j in CSSTest.mediaqueries) {
+            length = CSSTest.mediaqueries[j].length;
             for (i = 0; length > i; i++) {
-              query = CSS.mediaqueries[j][i];
-              if ((pass = CSS.supportMediaQuery(query))) passed++;
+              query = CSSTest.mediaqueries[j][i];
+              if ((pass = CSSTest.supportMediaQuery(query))) passed++;
               log(query, pass);
               count++;
             }
@@ -107,14 +107,14 @@
         }
         break;
       case '6':
-        if (typeof CSS.rules != 'undefined') {
+        if (typeof CSSTest.rules != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in CSS.rules) {
-            length = CSS.rules[j].length;
+          for (j in CSSTest.rules) {
+            length = CSSTest.rules[j].length;
             for (i = 0; length > i; i++) {
-              rule = CSS.rules[j][i];
-              if ((pass = CSS.supportAtRule(rule))) passed++;
+              rule = CSSTest.rules[j][i];
+              if ((pass = CSSTest.supportAtRule(rule))) passed++;
               log(rule, pass);
               count++;
             }
@@ -122,14 +122,14 @@
         }
         break;
       case '5':
-        if (typeof CSS.selectors != 'undefined') {
+        if (typeof CSSTest.selectors != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in CSS.selectors) {
-            length = CSS.selectors[j].length;
+          for (j in CSSTest.selectors) {
+            length = CSSTest.selectors[j].length;
             for (i = 0; length > i; i++) {
-              selector = CSS.selectors[j][i];
-              if ((pass = CSS.supportSelector(selector))) passed++;
+              selector = CSSTest.selectors[j][i];
+              if ((pass = CSSTest.supportSelector(selector))) passed++;
               log(selector, pass);
               count++;
             }
@@ -137,14 +137,14 @@
         }
         break;
       default:
-        if (typeof CSS.properties != 'undefined') {
+        if (typeof CSSTest.properties != 'undefined') {
           count = 0;
           passed = 0;
-          for (j in CSS.properties) {
-            property = CSS.properties[j][0];
+          for (j in CSSTest.properties) {
+            property = CSSTest.properties[j][0];
             // test CSS3 properties
-            if (CSS.properties[j][category] == 'yes') {
-              if (pass = CSS.supportProperty(property)) passed++;
+            if (CSSTest.properties[j][category] == 'yes') {
+              if (pass = CSSTest.supportProperty(property)) passed++;
               log(property, pass);
               count++;
             }
@@ -240,7 +240,7 @@
   }
 
   function groupChanged(element) {
-    CSS.test_table(element.options[element.selectedIndex].value,
+    CSSTest.test_table(element.options[element.selectedIndex].value,
       element.options[element.selectedIndex].text);
   }
 
@@ -282,7 +282,7 @@ of browser implementations.</p>
 
 <p>Using Javascript... and observing behavior of browsers own internal CSS parsers engines.</p>
 
-<p>On W3C compliant browsers the <code>addRule()/removeRule()</code> methods of the stylesheet object
+<p>On W3C compliant browsers the <code>insertRule()/deleteRule()</code> methods of the stylesheet object
 are used to manipulate the rules with the requested "tokens" and the outcome is inspected to match.
 The operation is performed in a <code>try/catch</code> block to take advantage of the CSS engine
 throwing error and letting us know of the unexpected illegal syntax.</p>
@@ -301,6 +301,7 @@ adequate with the expected result.</p>
 extra notification that the property is not consistent with expected value/type (maybe enumerated).</p>
 
 <h2>Notes:</h2>
+
 <ul>
 <li>at-rules and media queries results may still differ from what browsers implements (currently using the internal parser notfications)</li>
 <li>some element property name is different from the CSS property name (ex: float -> styleFloat) but is taken care of in the test code</li>

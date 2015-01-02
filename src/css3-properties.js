@@ -6,7 +6,7 @@
 // format (6 fields):
 // 	property-name  css1  css2  css2.1 css3 defaultValue
 */
-CSS.properties = [
+CSSTest.properties = [
 
   [ 'alignment-adjust', 'no', 'no', 'no', 'yes', 'auto' ],
   [ 'alignment-baseline', 'no', 'no', 'no', 'yes', 'baseline' ],
