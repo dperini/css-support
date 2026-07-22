@@ -2,7 +2,7 @@ this.CSSTest || (this.CSSTest = (function(global) {
 
 	var version = '0.4',
 
-	sheet, style,
+	sheet,
 
 	doc = global.document,
 	root = doc.documentElement,
@@ -24,7 +24,7 @@ this.CSSTest || (this.CSSTest = (function(global) {
 	// transform (p)roperty name to Camel Case (fontSize, lineHeight)
 	var toCamelCase =
 		function(p) {
-			if (p == 'float') {
+			if (p === 'float') {
 				return 'styleFloat' in root.style ? 'styleFloat' :
 					'cssFloat' in root.style ? 'cssFloat' : p;
 			}
@@ -44,7 +44,7 @@ this.CSSTest || (this.CSSTest = (function(global) {
 				try {
 					sheet.insertRule(rule, 0);
 					result = !(/unknown/i).test(sheet.cssRules[0].cssText);/* &&
-						sheet.cssRules[0].cssText.replace(/[\s;\\\x22\x27]/g, '') ==
+						sheet.cssRules[0].cssText.replace(/[\s;\\\x22\x27]/g, '') ===
 						rule.replace(/[\s;\\\x22\x27]/g, '');*/
 					sheet.deleteRule(sheet.cssRules.length - 1);
 				} catch(e) { }
@@ -66,7 +66,7 @@ this.CSSTest || (this.CSSTest = (function(global) {
 				try {
 					sheet.insertRule(media, 0);
 					result = !(/unknown/i).test(sheet.cssRules[0].cssText);/* &&
-						sheet.cssRules[0].cssText.replace(/[\s;\\\x22\x27]/g, '') ==
+						sheet.cssRules[0].cssText.replace(/[\s;\\\x22\x27]/g, '') ===
 						media.replace(/[\s;\\\x22\x27]/g, '');*/
 					sheet.deleteRule(sheet.cssRules.length - 1);
 				} catch(e) { }
@@ -103,7 +103,7 @@ this.CSSTest || (this.CSSTest = (function(global) {
 				if (!property) return false;
 				var result = false, prop = toCamelCase(property);
 				if (!value && prop in root.style) {
-					return typeof root.style[prop] == 'string';
+					return typeof root.style[prop] === 'string';
 				} else {
 					if (!(sheet)) return false;
 					try {
@@ -123,8 +123,8 @@ this.CSSTest || (this.CSSTest = (function(global) {
 					return sheet.cssText.indexOf(property.toUpperCase()) > - 1;
                 }
 				return name in root.style &&
-					typeof root.style[name] == 'string' ||
-					typeof root.style[name] == 'number';
+					typeof root.style[name] === 'string' ||
+					typeof root.style[name] === 'number';
 			}
 
 	};
